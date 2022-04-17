@@ -1,6 +1,7 @@
 import { createConnection } from 'typeorm';
 import * as dotenv from "dotenv";
 import { Message } from "../entities/Message";
+import { Converse } from "../entities/Converse";
 
 dotenv.config();
 
@@ -12,5 +13,5 @@ createConnection({
     username: process.env.TYPEORM_USERNAME,
     password: process.env.TYPEORM_PASSWORD,
     authSource: "admin",
-    entities: [Message]
+    entities: [Message, Converse]
 });

@@ -16,7 +16,7 @@ export class MessageController {
     }
     async find(request: Request, response: Response) {
 
-        const { conversationId } = request.body;
+        const { conversationId } = request.query;
         console.log(conversationId)
         const service = new ReadMessageService();
         const result = await service.execute({ conversationId });
@@ -25,6 +25,6 @@ export class MessageController {
             return response.status(400).json(result.message);
         }
 
-        return response.json(result);
+        return response.json({"messages":result});
     }
 }
