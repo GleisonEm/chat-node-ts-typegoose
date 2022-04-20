@@ -1,4 +1,4 @@
-import { getRepository } from "typeorm";
+import { MongoDbDataSource } from "../db/index";
 import * as dotenv from "dotenv";
 import { User } from 'src/types/User';
 import { Converse } from "../entities/Converse";
@@ -19,7 +19,7 @@ export class CreateConverseService {
         name,
         image
     }: ConverseRequest): Promise<Converse | Error> {
-        const converseRepository = getRepository(Converse);
+        const converseRepository = MongoDbDataSource.getRepository(Converse);
         // const messages = await messageRepository.find({ conversationId });
 
         // if (!messages) {

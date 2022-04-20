@@ -6,9 +6,11 @@ import {
     PrimaryColumn,
     ObjectIdColumn,
     ManyToOne,
-    JoinColumn
+    JoinColumn,
+    OneToMany,
+    RelationId
 } from 'typeorm';
-import { v4 as uuid} from "uuid";
+import { Converse } from './Converse';
 
 @Entity('messages')
 export class Message {
@@ -21,8 +23,16 @@ export class Message {
     @Column()
     message: string;
 
-    @Column()
+    @RelationId((message: Message) => message.converse)
     conversationId: string;
+
+    @Column({
+        default: 'sent'
+    })
+    status: string;
+
+    @ManyToOne(() => Converse, (converse) => converse.messages)
+    converse: Converse
 
     @CreateDateColumn({
         type: 'timestamp',

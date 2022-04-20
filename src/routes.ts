@@ -6,6 +6,7 @@ import { UserController } from "./controllers/UserController";
 const routes = Router();
 //Converse
 routes.post("/converse", new ConverseController().create);
+routes.get("/converse", new ConverseController().find);
 //User
 routes.post("/user", new UserController().create);
 //Message

@@ -1,44 +1,43 @@
 import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    UpdateDateColumn,
-    ObjectIdColumn
-} from 'typeorm';
-import { User } from 'src/types/User';
-import { v4 as uuid} from "uuid";
+  Column,
+  CreateDateColumn,
+  Entity,
+  UpdateDateColumn,
+  ObjectIdColumn,
+  OneToMany,
+  JoinTable,
+} from "typeorm";
+import { User } from "src/types/User";
+import { Message } from "./Message";
 
-@Entity('converses')
+@Entity("converses")
 export class Converse {
-    @ObjectIdColumn()
-    _id: string;
+  @ObjectIdColumn()
+  _id: string;
 
-    @Column({ nullable: true })
-    name: string;
+  @Column({ nullable: true })
+  name: string;
 
-    @Column()
-    author: string;
+  @Column()
+  author: string;
 
-    @Column()
-    participants: Array<User>;
+  @Column()
+  participants: Array<User>;
 
-    @Column({ nullable: true })
-    image: string;
+  @Column({ nullable: true })
+  image: string;
 
-    @CreateDateColumn({
-        type: 'timestamp',
-    })
-    createdAt: Date;
+  @OneToMany(() => Message, (message) => message.converse)
+  messages: Message[]
 
-    @UpdateDateColumn({
-        type: 'timestamp',
-        nullable: true,
-    })
-    updatedAt: Date;
+  @CreateDateColumn({
+    type: "timestamp",
+  })
+  createdAt: Date;
 
-    constructor() {
-        if (!this._id) {
-            this._id = uuid();
-        }
-    }
+  @UpdateDateColumn({
+    type: "timestamp",
+    nullable: true,
+  })
+  updatedAt: Date;
 }

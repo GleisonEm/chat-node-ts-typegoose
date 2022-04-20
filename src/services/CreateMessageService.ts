@@ -1,4 +1,4 @@
-import { getRepository } from "typeorm";
+import { MongoDbDataSource } from "../db/index";
 import { Message } from "../entities/Message";
 import * as dotenv from "dotenv";
 
@@ -16,7 +16,7 @@ export class CreateMessageService {
         conversationId,
         message
     }: MessageRequest): Promise<Message | Error> {
-        const messageRepository = getRepository(Message);
+        const messageRepository = MongoDbDataSource.getRepository(Message);
         // const messages = await messageRepository.find({ conversationId });
 
         // if (!messages) {
