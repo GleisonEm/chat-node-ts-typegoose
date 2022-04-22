@@ -1,8 +1,10 @@
 import {app} from "./app";
 import * as dotenv from "dotenv";
+import { connectionDatabase } from "./db/index";
 dotenv.config();
 
-app.listen(3333, function () {
+connectionDatabase();
 
-  console.log('typeof process.env.TYPEORM_PORT');
+app.listen(3333, function () {
+  console.log('server on');
 });

@@ -1,26 +1,27 @@
-import { DataSource } from 'typeorm';
-import * as dotenv from "dotenv";
-import { Message } from "../entities/Message";
-import { Converse } from "../entities/Converse";
-import { User } from '../entities/User';
+import mongoose from 'mongoose';
+import { EnvConfig } from "../services/EnvConfig";
 
-dotenv.config();
+(new EnvConfig).execute();
 
-export const MongoDbDataSource = new DataSource({
-    type: "mongodb",
-    host: process.env.TYPEORM_HOST,
-    port: Number(process.env.TYPEORM_PORT),
-    database: process.env.TYPEORM_DATABASE,
-    username: process.env.TYPEORM_USERNAME,
-    password: process.env.TYPEORM_PASSWORD,
-    authSource: "admin",
-    entities: [User, Message, Converse]
-});
+export const connectionDatabase = async () => {
+    let uri = null;
+    const connectionParams = {
+        // useNewUrlParser: true,
+        // useUnifiedTopology: true,
+        dbName: process.env.DB_DATABASE,
+        user: process.env.DB_USERNAME,
+        pass: process.env.DB_PASSWORD,
+        authSource: 'admin'
+    };
+    console.log(connectionParams);
+    // uri = `mongodb://${process.env.HOST}:${process.env.PORT}/${process.env.DB_DATABASE}`;
+    uri = 'mongodb://localhost:27017/';
 
-MongoDbDataSource.initialize()
-    .then(() => {
-        console.log("MongoDbDataSource has been initialized!")
-    })
-    .catch((err) => {
-        console.error("Error during MongoDbDataSource initialization", err)
-    })
+    mongoose.connect(uri, connectionParams)
+        .then(() => {
+            console.log("MongoDb has been initialized!");
+        })
+        .catch((err) => {
+            console.error("Error during MongoDb initialization", err);
+        });
+}

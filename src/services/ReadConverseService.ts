@@ -1,34 +1,36 @@
-import * as dotenv from "dotenv";
-import { Converse } from "../entities/Converse";
-import { MongoDbDataSource } from "../db/index";
-import { Message } from "../entities/Message";
-
-dotenv.config();
+import { MessageModel } from "../entities/Message";
+import { ConverseModel, Converse } from "../entities/Converse";
 
 type ConverseRequest = {
   userId: string;
 };
 
 export class ReadConverseService {
-  async execute({ userId }: ConverseRequest): Promise<any | Error> {
-    const converseRepository = MongoDbDataSource.getMongoRepository(Converse);
-    // const converses = await converseRepository.findBy({
-    //   participants: {
-    //     $in: [userId],
-    //   },
-    // });
-
-    const converses = await converseRepository.aggregate([
-      {
-        $lookup: {
-          from: "messages",
-          localField: "conversationId",
-          foreignField: "_id",
-          as: "converse",
+  async execute({ userId }: ConverseRequest): Promise<Array<Converse> | Error> {
+    const converses = await ConverseModel.find({
+      conversationId: { $in: userId },
+    })
+      .populate({
+        path: "messages",
+        model: MessageModel,
+        options: {
+          limit: 1,
+          sort: {
+            updatedAt: -1,
+          },
         },
-      },
-    ]).toArray();
+      })
+      .exec();
 
-    return converses;
+    return orderConverses(converses);
   }
+}
+
+function orderConverses(converses: Array<Converse>) {
+  return converses.sort((actual: Converse, next: Converse) => {
+    return (
+      next.messages[0].updatedAtToTimestamp -
+      actual.messages[0].updatedAtToTimestamp
+    );
+  });
 }

@@ -1,36 +1,25 @@
-import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    UpdateDateColumn,
-    ObjectIdColumn
-} from 'typeorm';
+import { prop, getModelForClass } from '@typegoose/typegoose';
+import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 
-@Entity('users')
-export class User {
-    @ObjectIdColumn()
-    _id: string;
+export class User extends TimeStamps {
 
-    @Column()
-    email: string;
+    @prop()
+    public email: string;
 
-    @Column()
-    username: string;
+    @prop()
+    public username: string;
 
-    @Column()
-    token: string;
+    @prop()
+    public token: string;
 
-    @Column()
-    password: string;
+    @prop()
+    public password: string;
 
-    @CreateDateColumn({
-        type: 'timestamp',
-    })
-    createdAt: Date;
+    @prop()
+    public createdAt: Date;
 
-    @UpdateDateColumn({
-        type: 'timestamp',
-        nullable: true,
-    })
-    updatedAt: Date;
+    @prop()
+    public updatedAt: Date;
 }
+
+export const UserModel = getModelForClass(User);

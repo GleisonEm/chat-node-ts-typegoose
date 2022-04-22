@@ -1,9 +1,5 @@
-import { MongoDbDataSource } from "../db/index";
-import * as dotenv from "dotenv";
 import { User } from 'src/types/User';
-import { Converse } from "../entities/Converse";
-
-dotenv.config();
+import { ConverseModel, Converse } from "../entities/Converse";
 
 type ConverseRequest = {
     author: string;
@@ -19,21 +15,15 @@ export class CreateConverseService {
         name,
         image
     }: ConverseRequest): Promise<Converse | Error> {
-        const converseRepository = MongoDbDataSource.getRepository(Converse);
-        // const messages = await messageRepository.find({ conversationId });
 
-        // if (!messages) {
-        //     return new Error('Não existem messagem');
-        // }
-
-        const converseCreate = converseRepository.create({
+        const converseCreate = new ConverseModel({
             author: author,
             participants: participants,
             name: name,
             image: image
         });
 
-        await converseRepository.save(converseCreate);
+        await converseCreate.save();
 
         return converseCreate;
     }

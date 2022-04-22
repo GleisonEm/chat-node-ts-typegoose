@@ -1,8 +1,4 @@
-import { MongoDbDataSource } from "../db/index";
-import { Message } from "../entities/Message";
-import * as dotenv from "dotenv";
-
-dotenv.config();
+import { Message, MessageModel } from "../entities/Message";
 
 type MessageRequest = {
     userSendId: string;
@@ -16,22 +12,15 @@ export class CreateMessageService {
         conversationId,
         message
     }: MessageRequest): Promise<Message | Error> {
-        const messageRepository = MongoDbDataSource.getRepository(Message);
-        // const messages = await messageRepository.find({ conversationId });
 
-        // if (!messages) {
-        //     return new Error('Não existem messagem');
-        // }
-
-        const messageCreate = messageRepository.create({
+        const messageCreate = new MessageModel({
             userSendId,
             message,
             conversationId
         });
 
-        await messageRepository.save(messageCreate);
+        await messageCreate.save();
 
         return messageCreate;
     }
-
 }

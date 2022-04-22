@@ -1,9 +1,5 @@
-import { MongoDbDataSource } from "../db/index";
-import { User } from "../entities/User";
+import { UserModel, User } from "../entities/User";
 import CryptoJS from "crypto-js";
-import * as dotenv from "dotenv";
-
-dotenv.config();
 
 type UserRequest = {
   username: string;
@@ -17,9 +13,8 @@ export class CreateUserService {
     email,
     password,
   }: UserRequest): Promise<User | Error> {
-    const userRepository = MongoDbDataSource.getRepository(User);
 
-    if (await userRepository.findOne({ where: { username: username } })) {
+    if (await UserModel.findOne({ where: { username: username } })) {
       return new Error("Já existe um usuário com esse username");
     }
 
@@ -30,14 +25,14 @@ export class CreateUserService {
     });
     var hashPassword = encryptPassword.toString(CryptoJS.enc.Base64);
 
-    const user = userRepository.create({
+    const UserCreate = new UserModel({
       username,
       email,
       password: hashPassword,
     });
 
-    await userRepository.save(user);
+    await UserCreate.save();
 
-    return user;
+    return UserCreate;
   }
 }

@@ -1,47 +1,46 @@
 import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    UpdateDateColumn,
-    PrimaryColumn,
-    ObjectIdColumn,
-    ManyToOne,
-    JoinColumn,
-    OneToMany,
-    RelationId
-} from 'typeorm';
-import { Converse } from './Converse';
+  prop,
+  getModelForClass,
+  Ref,
+  modelOptions,
+} from "@typegoose/typegoose";
+import { TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
+import mongoose from "mongoose";
+import { ConverseModel, Converse } from "./Converse";
 
-@Entity('messages')
+@modelOptions({ schemaOptions: { timestamps: true } })
 export class Message {
-    @ObjectIdColumn()
-    _id: string;
+  @prop()
+  public MessageSendId: string;
 
-    @Column()
-    userSendId: string;
+  @prop()
+  public message: string;
 
-    @Column()
-    message: string;
+  // @prop({
+  //     ref: () => ConverseModel,
+  //     foreignField: 'messages',
+  //     localField: 'converse',
+  // })
+  // public converse: Ref<Converse>;
 
-    @RelationId((message: Message) => message.converse)
-    conversationId: string;
+  @prop({
+    ref: () => Converse,
+    required: true,
+  })
+  public conversationId: Ref<Converse>;
 
-    @Column({
-        default: 'sent'
-    })
-    status: string;
+  @prop({ default: "sent" })
+  public status: string;
 
-    @ManyToOne(() => Converse, (converse) => converse.messages)
-    converse: Converse
+  @prop()
+  public createdAt: Date;
 
-    @CreateDateColumn({
-        type: 'timestamp',
-    })
-    createdAt: Date;
+  @prop()
+  public updatedAt: Date;
 
-    @UpdateDateColumn({
-        type: 'timestamp',
-        nullable: true,
-    })
-    updatedAt: Date;
+  public get updatedAtToTimestamp() {
+    return Date.parse(this.updatedAt.toISOString());
+  }
 }
+
+export const MessageModel = getModelForClass(Message);

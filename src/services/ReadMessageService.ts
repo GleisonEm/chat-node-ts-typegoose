@@ -1,6 +1,6 @@
-import { MongoDbDataSource } from "../db/index";
-import { Message } from "../entities/Message";
+import { MessageModel, Message } from "../entities/Message";
 import * as dotenv from "dotenv";
+import { Converse, ConverseModel } from "../entities/Converse";
 
 dotenv.config();
 
@@ -9,14 +9,14 @@ type MessageRequest = {
 };
 
 export class ReadMessageService {
-  async execute({
-    conversationId,
-  }: MessageRequest): Promise<Array<Message> | Error> {
+  async execute({ conversationId }: MessageRequest): Promise<any | Error> {
     console.log("entrei aq", conversationId);
-    const messageRepository = MongoDbDataSource.getRepository(Message);
-    const messages = await messageRepository.findBy({
+
+    const messages = await MessageModel.findOne({
       conversationId: conversationId,
-    });
+    })
+      .populate({ path: 'conversationId', model: ConverseModel })
+      .exec();
 
     return messages;
   }

@@ -1,43 +1,45 @@
 import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  UpdateDateColumn,
-  ObjectIdColumn,
-  OneToMany,
-  JoinTable,
-} from "typeorm";
-import { User } from "src/types/User";
-import { Message } from "./Message";
+  prop,
+  getModelForClass,
+  modelOptions,
+  Ref,
+} from "@typegoose/typegoose";
+import { Base } from "@typegoose/typegoose/lib/defaultClasses";
+import * as moongose from "mongoose";
+import { Message, MessageModel } from "./Message";
 
-@Entity("converses")
+@modelOptions({
+  schemaOptions: {
+    timestamps: true,
+    toJSON: { virtuals: true },
+  },
+})
 export class Converse {
-  @ObjectIdColumn()
-  _id: string;
+  @prop({ default: null })
+  public name?: string;
 
-  @Column({ nullable: true })
-  name: string;
+  @prop()
+  public author: string;
 
-  @Column()
-  author: string;
+  @prop()
+  public participants: string[];
 
-  @Column()
-  participants: Array<User>;
+  @prop({ default: null })
+  public image?: string;
 
-  @Column({ nullable: true })
-  image: string;
-
-  @OneToMany(() => Message, (message) => message.converse)
-  messages: Message[]
-
-  @CreateDateColumn({
-    type: "timestamp",
+  @prop({
+    ref: () => Message,
+    localField: "_id",
+    foreignField: "conversationId",
+    type: () => Message
   })
-  createdAt: Date;
+  public messages: Array<Message>;
 
-  @UpdateDateColumn({
-    type: "timestamp",
-    nullable: true,
-  })
-  updatedAt: Date;
+  @prop()
+  public createdAt: Date;
+
+  @prop()
+  public updatedAt: Date;
 }
+
+export const ConverseModel = getModelForClass(Converse);
