@@ -31,7 +31,7 @@ export class Converse {
     ref: () => Message,
     localField: "_id",
     foreignField: "conversationId",
-    type: () => Message
+    type: () => Message,
   })
   public messages: Array<Message>;
 

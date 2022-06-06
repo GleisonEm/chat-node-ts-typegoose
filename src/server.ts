@@ -1,6 +1,6 @@
 import {app} from "./app";
 import * as dotenv from "dotenv";
-import { connectionDatabase } from "./db/index";
+import { connectionDatabase } from "./db/MongoDb";
 dotenv.config();
 
 connectionDatabase();

@@ -1,4 +1,4 @@
-import { UserModel, User } from "../entities/User";
+import { UserModel, User } from "../../entities/mongodb/User";
 import CryptoJS from "crypto-js";
 
 type UserRequest = {
@@ -13,7 +13,6 @@ export class CreateUserService {
     email,
     password,
   }: UserRequest): Promise<User | Error> {
-
     if (await UserModel.findOne({ where: { username: username } })) {
       return new Error("Já existe um usuário com esse username");
     }

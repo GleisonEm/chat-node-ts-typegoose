@@ -1,7 +1,7 @@
-import { User } from "../types/User";
+import { User } from "../../types/User";
 import { Request, Response } from "express";
-import { CreateConverseService } from "../services/CreateConverseService";
-import { ReadConverseService } from "../services/ReadConverseService";
+import { CreateConverseService } from "../../services/mongodb/CreateConverseService";
+import { ReadConverseService } from "../../services/mongodb/ReadConverseService";
 
 export class ConverseController {
   async create(request: Request, response: Response) {

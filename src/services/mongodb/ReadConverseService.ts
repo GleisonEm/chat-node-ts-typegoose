@@ -1,5 +1,5 @@
-import { MessageModel } from "../entities/Message";
-import { ConverseModel, Converse } from "../entities/Converse";
+import { MessageModel } from "../../entities/mongodb/Message";
+import { ConverseModel, Converse } from "../../entities/mongodb/Converse";
 
 type ConverseRequest = {
   userId: string;
@@ -7,9 +7,9 @@ type ConverseRequest = {
 
 export class ReadConverseService {
   async execute({ userId }: ConverseRequest): Promise<Array<Converse> | Error> {
-    const converses = await ConverseModel.find({
-      conversationId: { $in: userId },
-    })
+    const converses = await ConverseModel.find()
+      .where("participants")
+      .in([userId])
       .populate({
         path: "messages",
         model: MessageModel,

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { CreateMessageService } from "../services/CreateMessageService";
-import { ReadMessageService } from "../services/ReadMessageService";
+import { CreateMessageService } from "../../services/mongodb/CreateMessageService";
+import { ReadMessageService } from "../../services/mongodb/ReadMessageService";
 
 export class MessageController {
   async create(request: Request, response: Response) {
@@ -27,15 +27,25 @@ export class MessageController {
     return response.json(result);
   }
   async find(request: Request, response: Response) {
-    const { conversationId }: { conversationId: string } = request.body;
+    const {
+      conversationId,
+      status,
+      converseIds,
+    }: {
+      conversationId: string;
+      status?: string;
+      converseIds?: Array<String>;
+    } = request.body;
 
     const service = new ReadMessageService();
-    const result = await service.execute({ conversationId });
+    const result = await service.get({ conversationId, status, converseIds });
 
     if (result instanceof Error) {
       return response.status(400).json(result.message);
     }
 
-    return response.json({ messages: result });
+    return response.json({
+      messages: result,
+    });
   }
 }
