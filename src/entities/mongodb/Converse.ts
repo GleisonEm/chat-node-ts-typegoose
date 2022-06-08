@@ -22,7 +22,7 @@ export class Converse {
   public author: string;
 
   @prop()
-  public participants: string[];
+  public participants: Number[];
 
   @prop({ default: null })
   public image?: string;

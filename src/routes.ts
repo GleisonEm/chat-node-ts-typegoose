@@ -6,7 +6,8 @@ import { UserController } from "./controllers/mysql/UserController";
 const routes = Router();
 //Converse
 routes.post("/converse", new ConverseController().create);
-routes.get("/converse", new ConverseController().find);
+routes.get("/converse", new ConverseController().get);
+routes.get("/converse/:id", new ConverseController().find);
 //Message
 routes.post("/message", new MessageController().create);
 routes.get("/message", new MessageController().find);

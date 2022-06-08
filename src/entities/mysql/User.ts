@@ -32,3 +32,4 @@ export class User {
   @Column({ default: null })
   type: string;
 }
+

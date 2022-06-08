@@ -8,12 +8,12 @@ export const connectionDatabase = async () => {
     const connectionParams = {
         // useNewUrlParser: true,
         // useUnifiedTopology: true,
-        dbName: process.env.DB_DATABASE,
-        user: process.env.DB_USERNAME,
-        pass: process.env.DB_PASSWORD,
+        dbName: process.env.MONGO_DB_DATABASE,
+        user: process.env.MONGO_DB_USERNAME,
+        pass: process.env.MONGO_DB_PASSWORD,
         authSource: 'admin'
     };
-    console.log(connectionParams);
+
     // uri = `mongodb://${process.env.HOST}:${process.env.PORT}/${process.env.DB_DATABASE}`;
     uri = 'mongodb://localhost:27017/';
 

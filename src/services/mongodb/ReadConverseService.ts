@@ -5,6 +5,10 @@ type ConverseRequest = {
   userId: string;
 };
 
+type ConverseFindRequest = {
+  conversationId: string;
+};
+
 export class ReadConverseService {
   async execute({ userId }: ConverseRequest): Promise<Array<Converse> | Error> {
     const converses = await ConverseModel.find()
@@ -23,6 +27,26 @@ export class ReadConverseService {
       .exec();
 
     return orderConverses(converses);
+  }
+  async find({ conversationId }: ConverseFindRequest): Promise<Converse | Error> {
+    const converse = ConverseModel.findById(conversationId)
+      .populate({
+        path: "messages",
+        model: MessageModel,
+        options: {
+          limit: 1,
+          sort: {
+            updatedAt: -1,
+          },
+        },
+      });
+
+    // return converse;
+
+    return converse.exec().then(
+      (converse) => converse,
+      (err) => err
+    );
   }
 }
 

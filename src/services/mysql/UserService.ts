@@ -12,12 +12,25 @@ type UserRequest = {
   password: string;
 };
 
+type UserGetRequest = {
+  userIds?: Array<Number>;
+};
 export class UserService {
-  async get(): Promise<Array<User> | Error> {
+  async ge2t(): Promise<Array<User> | Error> {
     const userRepository = MySqlDbDataSource.getRepository(User);
     const users = await userRepository.find();
 
     return users;
+  }
+  async get({ userIds }: UserGetRequest): Promise<Array<User> | Error> {
+    const userRepository = MySqlDbDataSource.getRepository(User);
+    var users = userRepository.createQueryBuilder();
+
+    if (userIds) {
+      users = users.where("id IN (:users)", { users: userIds })
+    }
+
+    return users.getMany();
   }
   async create({
     name,
