@@ -19,10 +19,10 @@ export class Converse {
   public name?: string;
 
   @prop()
-  public author: string;
+  public author: Number;
 
   @prop()
-  public participants: Number[];
+  public participants: any[];
 
   @prop({ default: null })
   public image?: string;

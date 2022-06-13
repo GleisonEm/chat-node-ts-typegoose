@@ -34,12 +34,11 @@ export class ReadConverseService {
         path: "messages",
         model: MessageModel,
         options: {
-          limit: 1,
           sort: {
             updatedAt: -1,
           },
         },
-      });
+      }).lean();
 
     // return converse;
 

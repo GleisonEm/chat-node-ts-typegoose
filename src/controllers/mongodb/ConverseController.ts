@@ -1,10 +1,12 @@
-import { User } from "../../types/User";
+import { User, UserInfoForConverse } from "../../types/User";
+import { Message as MessageType } from "../../types/Message";
 import { Request, Response } from "express";
 import { CreateConverseService } from "../../services/mongodb/CreateConverseService";
 import { ReadConverseService } from "../../services/mongodb/ReadConverseService";
 import { UserService } from "../../services/mysql/UserService";
 import { Converse } from "../../entities/mongodb/Converse";
 import { User as UserMysql } from "../../entities/mysql/User";
+import { Message } from "../../entities/mongodb/Message";
 
 export class ConverseController {
   async create(request: Request, response: Response) {
@@ -14,7 +16,7 @@ export class ConverseController {
       name,
       image,
     }: {
-      author: string;
+      author: Number;
       participants: Array<User>;
       name?: string;
       image?: string;
@@ -48,53 +50,49 @@ export class ConverseController {
 
     const conversationId: string = String(request.params.id);
     const service = new ReadConverseService();
-    const result = await service.find({ conversationId });
+    let converse = await service.find({ conversationId });
 
-    if (result instanceof Error) {
-      return response.status(400).json(result.message);
+    if (converse instanceof Error) {
+      return response.status(400).json(converse.message);
     }
 
-    const userIds: Array<Number> = result.participants;
+    const userIds: Array<Number> = converse.participants;
     const serviceUserMysql = new UserService();
-    const resultUser = await serviceUserMysql.get({ userIds });
+    const users = await serviceUserMysql.get({ userIds });
 
-    if (resultUser instanceof Error) {
-      return response.status(400).json(resultUser.message);
+    if (users instanceof Error) {
+      return response.status(400).json(users.message);
     }
 
+    // converse.messages = this.makeConverseWithMessagesSendMinutesAgo(converse);
 
-    // console.log(typeof result, typeof resultUser[0], this.makeConverseWithPersonNames(result, resultUser));
-    var users: Array<any> = [];
-    result.participants.forEach((userId: Number) => {
-      const user = resultUser.find((user: UserMysql) => user.id === userId);
+    return response.json({ converse: this.makeConverseWithPersonNames(converse, users) });
+  }
+  private makeConverseWithPersonNames(converse: Converse, users: Array<UserMysql>): Converse {
+    converse.participants.forEach((userId: number, key: number) => {
+      const user = users.find((user: UserMysql) => user.id === userId);
+      console.log(users)
       if (user) {
-        users.push({
+        console.log(user)
+        converse.participants[key] = {
           id: user.id,
           name: user.name,
           email: user.email,
           phone: user.phone,
-        });
+          avatar: user.avatar
+        };
       }
     });
 
-    result.participants = users;
-
-    return response.json({ converse: result });
+    return converse;
   }
-  // makeConverseWithPersonNames(result: any, resultUser: any): Converse {
-  //   console.log('entreei aq', result);
-  //   result.participants.map((userId: Number) => {
-  //     const user = resultUser.find((user: UserMysql) => user.id === userId);
-  //     if (user) {
-  //       return {
-  //         id: user.id,
-  //         name: user.name,
-  //         email: user.email,
-  //         phone: user.phone,
-  //       };
-  //     }
+  // private makeConverseWithMessagesSendMinutesAgo(converse: Converse): Array<Message> {
+  //   const messages: Array<Message> = converse.messages.map((message: Message) => {
+  //     var sendAgo = Math.round((Date.now() - Date.parse(message.createdAt.toISOString())) / 60000);
+
+  //     return { ...message, sendAgo }
   //   });
-  //   console.log('sdadsadsa', resultUser);
-  //   return resultUser;
+
+  //   return messages;
   // }
 }

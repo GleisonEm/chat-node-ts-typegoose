@@ -13,6 +13,7 @@ export const MySqlDbDataSource = new DataSource({
   username: process.env.MYSQL_DB_USERNAME,
   password: process.env.MYSQL_DB_PASSWORD,
   entities: [User],
+  // insecureAuth: true
   // migrationsTableName: "custom_migration_table",
   // migrations: [UserCreate1654484866320],
 });
@@ -22,5 +23,8 @@ MySqlDbDataSource.initialize()
     console.log("MySqlDbDataSource has been initialized!");
   })
   .catch((err) => {
+    if (err === "Connection lost: The server closed the connection.") {
+      MySqlDbDataSource.synchronize();
+    }
     console.error("Error during MySqlDbDataSource initialization", err);
   });

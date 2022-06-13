@@ -4,10 +4,11 @@ import { ConverseController } from "./controllers/mongodb/ConverseController";
 import { UserController } from "./controllers/mysql/UserController";
 
 const routes = Router();
+const converseController = new ConverseController();
 //Converse
-routes.post("/converse", new ConverseController().create);
-routes.get("/converse", new ConverseController().get);
-routes.get("/converse/:id", new ConverseController().find);
+routes.post("/converse", converseController.create);
+routes.get("/converse", converseController.get);
+routes.get("/converse/:id", converseController.find.bind(converseController));
 //Message
 routes.post("/message", new MessageController().create);
 routes.get("/message", new MessageController().find);

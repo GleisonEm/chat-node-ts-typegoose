@@ -10,12 +10,16 @@ import { ConverseModel, Converse } from "./Converse";
 
 @modelOptions({ schemaOptions: { timestamps: true } })
 export class Message {
+  // @prop()
+  // public MessageSendId: string;
   @prop()
-  public MessageSendId: string;
+  public userSendId: Number;
 
   @prop()
   public message: string;
 
+  @prop()
+  public uniqueId: string;
   // @prop({
   //     ref: () => ConverseModel,
   //     foreignField: 'messages',
@@ -41,6 +45,18 @@ export class Message {
   public get updatedAtToTimestamp() {
     return Date.parse(this.updatedAt.toISOString());
   }
+
+  // public set addSendAgo(value: any) {
+  //   this.sendAgo = value;
+  // }
+
+  // public sendAgo: Number;
+  // public get sendAgo() {
+
+  //   var minutes = (Date.now() - Date.parse(this.createdAt.toISOString())) / 60000;
+
+  //   return minutes;
+  // }
 }
 
 export const MessageModel = getModelForClass(Message);

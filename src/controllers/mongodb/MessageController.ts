@@ -7,16 +7,19 @@ export class MessageController {
     const {
       userSendId,
       conversationId,
+      uniqueId,
       message,
     }: {
       userSendId: string;
       message: string;
+      uniqueId: string;
       conversationId: string;
     } = request.body;
     const service = new CreateMessageService();
     const result = await service.execute({
       userSendId,
       conversationId,
+      uniqueId,
       message,
     });
 

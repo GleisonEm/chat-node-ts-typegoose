@@ -2,7 +2,7 @@ import { User } from "src/types/User";
 import { ConverseModel, Converse } from "../../entities/mongodb/Converse";
 
 type ConverseRequest = {
-  author: string;
+  author: Number;
   participants: Array<User>;
   name?: string;
   image?: string;

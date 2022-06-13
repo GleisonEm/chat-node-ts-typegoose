@@ -42,6 +42,7 @@
         "google-translate": "^3.0.0",
         "mongodb": "^4.4.0",
         "mongoose": "^6.3.0",
+        "morgan": "^1.10.0",
         "mysql": "^2.18.1",
         "nodemon": "^2.0.15",
         "reflect-metadata": "^0.1.13",

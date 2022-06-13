@@ -12,6 +12,9 @@ export class User extends TimeStamps {
   public token: string;
 
   @prop()
+  public avatar: string;
+
+  @prop()
   public password: string;
 
   @prop()
