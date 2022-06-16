@@ -10,6 +10,7 @@ type UserRequest = {
   email: string;
   phone: string;
   password: string;
+  type: string;
 };
 
 type UserGetRequest = {
@@ -37,6 +38,7 @@ export class UserService {
     email,
     phone,
     password,
+    type
   }: UserRequest): Promise<User | Error> {
     const userRepository = MySqlDbDataSource.getRepository(User);
 
@@ -60,6 +62,7 @@ export class UserService {
       email: email,
       phone: phone,
       password: hashPassword,
+      type: type,
     });
 
     await userRepository.save(UserCreate);

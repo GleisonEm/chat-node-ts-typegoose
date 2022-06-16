@@ -8,14 +8,16 @@ export class UserController {
       email,
       phone,
       password,
+      type
     }: {
       name: string;
       email: string;
       phone: string;
       password: string;
+      type: string;
     } = request.body;
     const service = new UserService();
-    const result = await service.create({ name, email, phone, password });
+    const result = await service.create({ name, email, phone, password, type });
 
     if (result instanceof Error) {
       return response.status(400).json(result.message);

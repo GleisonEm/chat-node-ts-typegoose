@@ -6,17 +6,17 @@ import { UserController } from "./controllers/mysql/UserController";
 const routes = Router();
 const converseController = new ConverseController();
 //Converse
-routes.post("/converse", converseController.create);
-routes.get("/converse", converseController.get);
-routes.get("/converse/:id", converseController.find.bind(converseController));
+routes.post("/converses", converseController.create);
+routes.get("/converses", converseController.get.bind(converseController));
+routes.get("/converses/:id", converseController.find.bind(converseController));
 //Message
-routes.post("/message", new MessageController().create);
-routes.get("/message", new MessageController().find);
+routes.post("/messages", new MessageController().create);
+routes.get("/messages", new MessageController().find);
 
 //mysql
 
 //User
-routes.post("/user", new UserController().create);
-routes.get("/user", new UserController().get);
+routes.post("/users", new UserController().create);
+routes.get("/users", new UserController().get);
 
 export { routes };

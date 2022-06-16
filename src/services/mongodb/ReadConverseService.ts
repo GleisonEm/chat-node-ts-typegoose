@@ -2,7 +2,8 @@ import { MessageModel } from "../../entities/mongodb/Message";
 import { ConverseModel, Converse } from "../../entities/mongodb/Converse";
 
 type ConverseRequest = {
-  userId: string;
+  userId: number;
+  type?: string;
 };
 
 type ConverseFindRequest = {
@@ -10,23 +11,31 @@ type ConverseFindRequest = {
 };
 
 export class ReadConverseService {
-  async execute({ userId }: ConverseRequest): Promise<Array<Converse> | Error> {
-    const converses = await ConverseModel.find()
-      .where("participants")
+  async get({ userId, type }: ConverseRequest): Promise<Array<Converse> | Error> {
+    let converses = ConverseModel.find();
+
+    if (type) {
+      converses = converses.where('type').equals(type);
+    }
+
+    return converses.where('participants')
       .in([userId])
       .populate({
         path: "messages",
         model: MessageModel,
         options: {
+          skip: 1,
           limit: 1,
           sort: {
             updatedAt: -1,
           },
         },
-      })
-      .exec();
-
-    return orderConverses(converses);
+      }).lean().exec()
+      .then(
+        (converses) => converses,
+        (err) => err
+      );
+    // return orderConverses(converses);
   }
   async find({ conversationId }: ConverseFindRequest): Promise<Converse | Error> {
     const converse = ConverseModel.findById(conversationId)

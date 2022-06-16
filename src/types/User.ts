@@ -7,4 +7,5 @@ export interface UserInfoForConverse {
     name: string,
     email: string,
     phone: string,
+    avatar: number
 }

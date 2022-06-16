@@ -21,6 +21,9 @@ export class Converse {
   @prop()
   public author: Number;
 
+  @prop({ default: 'converse' })
+  public type: string;
+
   @prop()
   public participants: any[];
 
