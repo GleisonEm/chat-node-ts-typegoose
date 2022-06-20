@@ -42,13 +42,30 @@ export class ConverseController {
     const type: string = request.query.type;
 
     const service = new ReadConverseService();
-    const result = await service.get({ userId, type });
+    let converses = await service.get({ userId, type });
 
-    if (result instanceof Error) {
-      return response.status(400).json(result.message);
+    if (converses instanceof Error) {
+      return response.status(400).json(converses.message);
     }
 
-    return response.json({ converses: result });
+    if (type == "converse") {
+      let userIds: Array<number> = [];
+      converses.forEach((converse: Converse) => {
+        userIds = userIds.concat(converse.participants);
+      });
+      const serviceUserMysql = new UserService();
+      const users = await serviceUserMysql.get({ userIds });
+
+      if (users instanceof Error) {
+        return response.status(400).json(users.message);
+      }
+
+      converses = converses.map((converse: Converse) => {
+        return this.makeConverseWithPersonNames(converse, users);
+      });
+    }
+
+    return response.json({ converses: converses });
   }
   async find(request: Request, response: Response) {
 
@@ -82,7 +99,6 @@ export class ConverseController {
           id: user.id,
           name: user.name,
           email: user.email,
-          phone: user.phone,
           avatar: user.avatar
         };
       }

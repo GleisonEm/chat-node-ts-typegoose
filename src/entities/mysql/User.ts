@@ -12,6 +12,9 @@ export class User {
   id: number;
 
   @Column()
+  cpf: string;
+
+  @Column()
   name: string;
 
   @Column()
@@ -21,18 +24,27 @@ export class User {
   avatar: string;
 
   @Column()
-  phone: string;
-
-  @Column({ default: null })
-  registration_code: string;
-
-  @Column()
   password: string;
 
   @Column({ default: null })
-  token: string;
+  path_signature: string;
+
+  @Column({ default: 4 })
+  assignment_id: number;
+
+  @Column({ default: 4 })
+  institute_id: number;
+
+  @Column({ default: 4 })
+  area_id: number;
+
+  @Column({ default: 'N' })
+  block: string;
 
   @Column({ default: null })
-  type: string;
+  remember_token: string;
+
+  @Column({ default: null })
+  tags: string;
 }
 

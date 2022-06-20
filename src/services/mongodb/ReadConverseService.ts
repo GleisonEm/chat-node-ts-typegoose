@@ -24,7 +24,6 @@ export class ReadConverseService {
         path: "messages",
         model: MessageModel,
         options: {
-          skip: 1,
           limit: 1,
           sort: {
             updatedAt: -1,

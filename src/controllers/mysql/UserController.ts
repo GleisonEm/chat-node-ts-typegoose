@@ -27,7 +27,8 @@ export class UserController {
   }
   async get(request: Request, response: Response) {
     const service = new UserService();
-    const result = await service.ge2t();
+    const type: number = 4;
+    const result = await service.get({ type });
 
     if (result instanceof Error) {
       return response.status(400).json(result.message);

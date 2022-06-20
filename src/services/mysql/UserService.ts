@@ -15,6 +15,7 @@ type UserRequest = {
 
 type UserGetRequest = {
   userIds?: Array<Number>;
+  type?: number;
 };
 export class UserService {
   async ge2t(): Promise<Array<User> | Error> {
@@ -23,12 +24,16 @@ export class UserService {
 
     return users;
   }
-  async get({ userIds }: UserGetRequest): Promise<Array<User> | Error> {
+  async get({ userIds, type }: UserGetRequest): Promise<Array<User> | Error> {
     const userRepository = MySqlDbDataSource.getRepository(User);
     var users = userRepository.createQueryBuilder();
 
     if (userIds) {
-      users = users.where("id IN (:users)", { users: userIds })
+      users = users.where("id IN (:users)", { users: userIds });
+    }
+    console.log(type)
+    if (type) {
+      users = users.where("assignment_id = :type", { type: type });
     }
 
     return users.getMany();
@@ -60,9 +65,7 @@ export class UserService {
     const UserCreate = userRepository.create({
       name: name,
       email: email,
-      phone: phone,
       password: hashPassword,
-      type: type,
     });
 
     await userRepository.save(UserCreate);
