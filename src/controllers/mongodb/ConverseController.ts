@@ -17,8 +17,8 @@ export class ConverseController {
       name,
       image,
     }: {
-      author: Number;
-      participants: Array<User>;
+      author: number;
+      participants: Array<Number>;
       name?: string;
       image?: string;
     } = request.body;

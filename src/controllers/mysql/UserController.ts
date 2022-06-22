@@ -1,4 +1,6 @@
+import { TypedRequestQuery } from "@src/types/TypedRequestQuery";
 import { Request, Response } from "express";
+import { STUDENT } from "../../constants/User";
 import { UserService } from "../../services/mysql/UserService";
 
 export class UserController {
@@ -25,10 +27,17 @@ export class UserController {
 
     return response.json(result);
   }
-  async get(request: Request, response: Response) {
+  async get(request: TypedRequestQuery<{ userId: string }>, response: Response) {
+    const userId: number = parseInt(request.query.userId);
     const service = new UserService();
-    const type: number = 4;
-    const result = await service.get({ type });
+    const type: number = STUDENT;
+    var paramsService: { type: number, ignoreUserId?: number } = { type: type };
+
+    if (userId) {
+      paramsService.ignoreUserId = userId;
+    }
+
+    const result = await service.get(paramsService);
 
     if (result instanceof Error) {
       return response.status(400).json(result.message);

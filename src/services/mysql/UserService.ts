@@ -16,6 +16,7 @@ type UserRequest = {
 type UserGetRequest = {
   userIds?: Array<Number>;
   type?: number;
+  ignoreUserId?: number;
 };
 export class UserService {
   async ge2t(): Promise<Array<User> | Error> {
@@ -24,19 +25,27 @@ export class UserService {
 
     return users;
   }
-  async get({ userIds, type }: UserGetRequest): Promise<Array<User> | Error> {
+  async get({ userIds, type, ignoreUserId }: UserGetRequest): Promise<Array<User> | Error> {
     const userRepository = MySqlDbDataSource.getRepository(User);
-    var users = userRepository.createQueryBuilder();
+    var whereFields: {
 
+    } = {
+
+    };
     if (userIds) {
       users = users.where("id IN (:users)", { users: userIds });
     }
-    console.log(type)
+    console.log(typeof type, type, ignoreUserId)
+    if (ignoreUserId) {
+      users = users.where("id != :userId", { userId: ignoreUserId });
+    }
+    // console.log(users.andWhere)
     if (type) {
-      users = users.where("assignment_id = :type", { type: type });
+      users = users.andWhere("assignment_id = :type", { type: type });
     }
 
-    return users.getMany();
+
+    return await userRepository.find();
   }
   async create({
     name,
