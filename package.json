@@ -1,5 +1,5 @@
 {
-    "name": "camelcasetranslater",
+    "name": "chat-api-ada",
     "version": "1.0.0",
     "description": "socket-api",
     "exports": "./src/server.ts",
@@ -12,6 +12,7 @@
     },
     "scripts": {
         "build": "tsc",
+        "start:prod": "node build/server.js",
         "watch-ts": "tsc -w",
         "watch-node": "nodemon dist/server.js",
         "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript, Node\" -c \"yello.bold, cyan.bold\" \"yarn run watch-ts\" \"yarn run watch-node\"",
