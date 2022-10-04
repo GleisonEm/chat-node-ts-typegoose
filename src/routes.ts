@@ -19,6 +19,6 @@ routes.get("/messages", new MessageController().find);
 // routes.post("/users", new UserController().create);
 // routes.get("/users", new UserController().get);
 
-routes.get("/tester", new MessageController().test);
+routes.get("/teste/entrega/orders", new MessageController().test);
 
 export { routes };
