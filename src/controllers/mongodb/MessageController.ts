@@ -64,27 +64,27 @@ export class MessageController {
       "orderDetails": "1x pizza de calabresa",
       "despatchMode": "manual",
       "deliveryPoint": {
-        "address": "Rua José Neves, 590",
-        "street": "Rua José Neves",
-        "houseNumber": "590",
+        "address": "R. Bulhões Marquês, 11 - Boa Vista, Recife",
+        "street": "R. Bulhões Marquês",
+        "houseNumber": "11",
         "coordinates": {
-          "lat": -23.657821664941558,
-          "lng": -46.67431259551918
+          "lat": -8.063775239879797,
+          "lng": -34.884067621365865
         },
-        "city": "São Paulo",
-        "region": "SP",
-        "country": "BRA",
-        "complement": "sala 03"
+        "city": "Recife",
+        "region": "PE",
+        "country": "BR",
+        "complement": "Bar do biu"
       },
       "collectionPoint": {
-        "name": "Dardis Bistro",
-        "address": "Rua José Neves, 1000, Vila Sao Paulo",
+        "name": "C&A modas",
+        "address": "Av. Conde da Boa Vista - Boa Vista, Recife",
         "coordinates": {
-          "lat": -23.6563874,
-          "lng": -46.6705633
+          "lat": -8.059776099059915,
+          "lng": -34.88521910379321
         },
-        "city": "São Paulo",
-        "region": "SP",
+        "city": "Recife",
+        "region": "PE",
         "country": "BR"
       },
       "customer": {
